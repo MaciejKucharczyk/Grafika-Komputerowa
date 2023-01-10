@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+from cmath import cos, pi
+from math import sin
+import math
 import sys
 
 from glfw.GLFW import *
@@ -21,6 +24,12 @@ mouse_y_pos_old = 0
 delta_x = 0
 delta_y = 0
 
+""" Obsluga kamery """
+x_e =0
+y_e =0
+z_e =0
+R = 1.0
+zoom = True
 
 def startup():
     update_viewport(None, 400, 400)
@@ -89,12 +98,14 @@ def render(time):
     global theta
     global phi
     global scale
+    global x_e, y_e, z_e, R
+    global zoom
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
     glLoadIdentity()
 
-    gluLookAt(viewer[0], viewer[1], viewer[2],
-              0.0, 0.0, 0.0, 0.0, 1.0, 0.0)
+   # gluLookAt(viewer[0], viewer[1], viewer[2],
+    #          0.0, 0.0, 0.0, 0.0, 1.0, 0.0)
 
     if left_mouse_button_pressed:
         theta += delta_x * pix2angle
@@ -104,11 +115,21 @@ def render(time):
 
     if right_mouse_button_pressed:
         scale = delta_y
+        if zoom:
+            R += 1.0
+        else:
+            R -= 1.0
 
-    glScalef(scale, scale, scale)
+    x_e = R * math.cos(theta*pi/180)  * math.cos(phi*pi/180)
+    y_e = R * math.sin(phi*pi/180)
+    z_e = R * math.sin(theta*pi/180) * math.cos(phi*pi/180)
 
-    glRotatef(theta, 0.0, 1.0, 0.0)
-    glRotatef(phi, 1.0, 0.0, 0.0)
+    gluLookAt(x_e, y_e, z_e, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0)
+
+   # glScalef(scale, scale, scale)
+
+   # glRotatef(theta, 0.0, 1.0, 0.0)
+   # glRotatef(phi, 1.0, 0.0, 0.0)
 
     axes()
     example_object()
