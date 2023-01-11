@@ -43,7 +43,7 @@ def axes():
     glVertex3f(0.0, -5.0, 0.0)
     glVertex3f(0.0, 5.0, 0.0)
 
-    glColor3f(0.0, 0.0, 1.0)
+    glColor3f(0.0, 0.0, 1.0) 
     glVertex3f(0.0, 0.0, -5.0)
     glVertex3f(0.0, 0.0, 5.0)
 
@@ -103,7 +103,7 @@ def render(time):
         phi += delta_y * pix2angle
 
     if right_mouse_button_pressed:
-        scale = delta_y
+        scale = mouse_y_pos_old*0.01
 
     glScalef(scale, scale, scale)
 
